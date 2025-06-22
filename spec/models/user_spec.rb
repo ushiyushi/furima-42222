@@ -31,7 +31,8 @@ RSpec.describe User, type: :model do
       end
       it '@が含まれていないと登録できない' do
         @user.email = 'aaaaaaa'
-        expect(@user).not_to be_valid 
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Email is invalid") 
       end
       it "passwordが空では登録できない" do
         @user.password = ''
@@ -40,7 +41,8 @@ RSpec.describe User, type: :model do
       end
       it 'passwordが6文字以上でないと登録できない' do
         @user.password = @user.password_confirmation = 'a1b2c'
-        expect(@user).not_to be_valid
+        @user.valid?
+        expect(@user.errors.full_messages).to include("Password is too short (minimum is 6 characters)")
       end
       it 'password_confirmation と一致していないと登録できない' do
         @user.password = 'abc123'
@@ -50,15 +52,18 @@ RSpec.describe User, type: :model do
       end
       it '英字のみでは登録できない' do
         @user.password = @user.password_confirmation = 'abcdef'
-        expect(@user).not_to be_valid
+         @user.valid?
+        expect(@user.errors.full_messages).to include("Password is invalid. Include both letters and numbers")
       end
       it '数字のみでは登録できない' do
         @user.password = @user.password_confirmation = '123456'
-        expect(@user).not_to be_valid
+         @user.valid?
+        expect(@user.errors.full_messages).to include("Password is invalid. Include both letters and numbers")
       end
       it '全角だと登録できない' do
         @user.password = @user.password_confirmation = 'ａｂｃ１２３'
-        expect(@user).not_to be_valid
+         @user.valid?
+        expect(@user.errors.full_messages).to include("Password is invalid. Include both letters and numbers")
       end
       it "name_seiが空では登録できない" do
         @user.name_sei = ''
@@ -87,7 +92,8 @@ RSpec.describe User, type: :model do
       end
       it 'kana_seiはカタカナ以外では登録できない' do
         @user.kana_sei = 'やま田'
-        expect(@user).not_to be_valid
+        @user.valid?
+        expect(@user.errors[:kana_sei]).to include('is invalid. Input full-width katakana characters')
       end
       it "kana_meiが空では登録できない" do
         @user.kana_mei = ''
@@ -96,12 +102,13 @@ RSpec.describe User, type: :model do
       end
       it 'kana_meiはカタカナ以外では登録できない' do
         @user.kana_mei = '太ろう'
-        expect(@user).not_to be_valid
+        @user.valid?
+        expect(@user.errors[:kana_mei]).to include('is invalid. Input full-width katakana characters')
       end
       it 'birthday が空だと無効' do
         @user.birthday = nil
         @user.valid?
-        expect(@user.errors[:birthday]).to include("can't be blank")
+        expect(@user.errors.full_messages).to include("Birthday can't be blank")
       end
     end
   end
