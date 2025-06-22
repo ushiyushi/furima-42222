@@ -40,7 +40,7 @@ RSpec.describe User, type: :model do
         expect(@user.errors.full_messages).to include("Name sei can't be blank")
       end
       it "name_meiが空では登録できない" do
-        @user.name_mei = ''
+        @user.name_mei = 'あ'
         @user.valid?
         expect(@user.errors.full_messages).to include("Name mei can't be blank")
       end
