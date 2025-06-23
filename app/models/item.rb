@@ -10,6 +10,7 @@ class Item < ApplicationRecord
              format: {with: /\A[0-9]+\z/, message: "must be half‑width numeric"}
 
   belongs_to :user
+  has_one_attached :image
   # has_one    :purchase
 
   extend ActiveHash::Associations::ActiveRecordExtensions
