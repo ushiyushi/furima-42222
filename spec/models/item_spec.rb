@@ -29,27 +29,27 @@ RSpec.describe Item, type: :model do
         expect(@item.errors.full_messages).to include("Introduction can't be blank")
       end
       it "categoryが空では登録できない" do
-        @item.category_id = ''
+        @item.category_id = '---'
         @item.valid?
         expect(@item.errors.full_messages).to include("Category can't be blank")
       end
       it "conditionが空では登録できない" do
-        @item.condition_id = ''
+        @item.condition_id = '---'
         @item.valid?
         expect(@item.errors.full_messages).to include("Condition can't be blank")
       end
       it "feeが空では登録できない" do
-        @item.fee_id = ''
+        @item.fee_id = '---'
         @item.valid?
         expect(@item.errors.full_messages).to include("Fee can't be blank")
       end
       it "prefectureが空では登録できない" do
-        @item.prefecture_id = ''
+        @item.prefecture_id = '---'
         @item.valid?
         expect(@item.errors.full_messages).to include("Prefecture can't be blank")
       end
       it "delivery_timeが空では登録できない" do
-        @item.delivery_time_id = ''
+        @item.delivery_time_id = '---'
         @item.valid?
         expect(@item.errors.full_messages).to include("Delivery time can't be blank")
       end
@@ -58,8 +58,13 @@ RSpec.describe Item, type: :model do
         @item.valid?
         expect(@item.errors.full_messages).to include("Price can't be blank")
       end
-      it "priceが￥300～￥9,999,999以外では登録できない" do
+      it "priceが￥299以下では登録できない" do
         @item.price = '200'
+        @item.valid?
+        expect(@item.errors.full_messages).to include("Price must be in 300..9999999")
+      end
+      it "priceが￥10,000,000以上では登録できない" do
+        @item.price = '11111111'
         @item.valid?
         expect(@item.errors.full_messages).to include("Price must be in 300..9999999")
       end
@@ -67,6 +72,11 @@ RSpec.describe Item, type: :model do
         @item.price = '５００'
         @item.valid?
         expect(@item.errors.full_messages).to include("Price is not a number")
+      end
+      it "userが紐づいていないと出品できない" do
+        @item.user = nil
+        @item.valid?
+        expect(@item.errors[:user]).to include("must exist")
       end
     end
   end
