@@ -4,5 +4,5 @@ Rails.application.routes.draw do
   root to: "items#index"
   get "up" => "rails/health#show", as: :rails_health_check
 
-  resources :items, only: [:index, :new, :create]
+  resources :items, only: [:index, :new, :create, :show]
 end
