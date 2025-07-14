@@ -1,7 +1,4 @@
 const pay = () => {
-  // if (typeof gon === "undefined" || !gon.public_key) {
-  //   return;
-  // }
   const publicKey = gon.public_key
   const payjp = Payjp(publicKey) // PAY.JPテスト公開鍵
   const elements = payjp.elements();
